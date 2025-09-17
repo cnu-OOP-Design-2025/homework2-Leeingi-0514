@@ -58,32 +58,60 @@ void fillStudentRecord(StudentStruct *students, int *numOfStudent) {
 
 /* Return student ID */
 int findBestStudentInMidterm(StudentStruct* students, int numOfStudent) {
-    /* TODO */
-    return 1001;
+    int bestStudentID = 0;
+    float bestScore = 0.0f;
+    for(int i = 0; i< numOfStudent; i++){
+        float score = students[i].record.midterm;
+        if(bestScore < score){
+            bestScore = score;
+            bestStudentID = students[i].id; 
+        }
+    }
+    return bestStudentID;
 }
 
 /* Return student ID */
 int findBestStudentInFinal(StudentStruct* students, int numOfStudent) {
-    /* TODO */
-    return 1001;
+    int bestStudentID = 0;
+    float bestScore = 0.0f;
+    for(int i = 0; i< numOfStudent; i++){
+        float score = students[i].record.final;
+        if(bestScore < score){
+            bestScore = score;
+            bestStudentID = students[i].id; 
+        }
+    }
+    return bestStudentID;
 }
 
 /* Return student ID */
 int findBestStudent(StudentStruct* students, int numOfStudent) {
-    /* TODO */
-    return 1001;
+    int bestStudentID = 0;
+    float bestScore = 0.0f;
+    for(int i = 0; i< numOfStudent; i++){
+        float score = students[i].record.final + students[i].record.midterm;
+        if(bestScore < score){
+            bestScore = score;
+            bestStudentID = students[i].id; 
+        }
+    }
+    return bestStudentID;
 }
 
 /* Return Index */
 int findStudentByStudentID(StudentStruct* students, int numOfStudent, int id) {
-    /* TODO */
-    return -1;
+    int index = -1;
+    for(int i = 0; i<numOfStudent; i++){
+        if(students[i].id == id) index = i;
+    }
+    return index;
 }
 
 void modifyRecord(StudentStruct *students, int numOfStudent, const StudentStruct& student) {
     int idx = findStudentByStudentID(students, numOfStudent, student.id);
     if (idx >= 0) {
-        /* TODO */
+        students[idx].record.final = student.record.final;
+        students[idx].record.midterm = student.record.midterm;
     }
 }
 
@@ -91,7 +119,10 @@ void addStudent(StudentStruct *students, int *numOfStudent, const char* name, in
     int idx = findStudentByStudentID(students, *numOfStudent, id);
     if (idx < 0) {
         ++(*numOfStudent);
-        /* TODO */
+        students[*numOfStudent-1].name = name;
+        students[*numOfStudent-1].id = id;
+        students[*numOfStudent-1].record.final = final;
+        students[*numOfStudent-1].record.midterm = midterm;
     }
 }
 
@@ -99,23 +130,40 @@ void deleteStudent(StudentStruct* students, int *numOfStudent, int id) {
     int idx = findStudentByStudentID(students, *numOfStudent, id);
     if (idx >= 0) {
         --(*numOfStudent);
-        /* TODO */
+        for(int i = idx; i < *numOfStudent; i++){
+            students[i].name = students[i+1].name;
+            students[i].id = students[i+1].id;
+            students[i].record.midterm = students[i+1].record.midterm;
+            students[i].record.final = students[i+1].record.final;
+        }
     }
 }
 
 float getMidtermAverage(StudentStruct* students, int numOfStudent) {
-    /* TODO */
-    return 0.0f;
+    float totalScore = 0.0f;
+    for(int i = 0; i<numOfStudent; i++){
+        totalScore += students[i].record.midterm;
+    }
+    float totalAvg = totalScore/numOfStudent;
+    return totalAvg;
 }
 
 float getFinalAverage(StudentStruct* students, int numOfStudent) {
-    /* TODO */
-    return 0.0f;
+    float totalScore = 0.0f;
+    for(int i = 0; i<numOfStudent; i++){
+        totalScore += students[i].record.final;
+    }
+    float totalAvg = totalScore/numOfStudent;
+    return totalAvg;
 }
 
 float getTotalAverage(StudentStruct* students, int numOfStudent) {
-    /* TODO */
-    return 0.0f;
+    float totalScore = 0.0f;
+    for(int i = 0; i<numOfStudent; i++){
+        totalScore += (students[i].record.final+students[i].record.midterm);
+    }
+    float totalAvg = totalScore/(numOfStudent*2);
+    return totalAvg;
 }
 
 void printStudentInfo(StudentStruct* students, int numOfStudent, int id) {
